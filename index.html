@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en" class="no-js" data-heading-font="bitcount">
+<head>
+  <!-- 01 页面信息：改浏览器标签页名称用 title；改搜索简介用 description。 -->
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="theme-color" content="#000000">
+  <meta name="color-scheme" content="dark">
+  <link rel="icon" type="image/png" href="art/cyne-logo-silver.png">
+  <meta name="description" content="Jingyi Chen / Cyne — product management and UI/UX for AI-powered creative tools. NYU Tisch Interactive Media Arts, with a minor in Film.">
+  <title>Cyne.</title>
+  <!-- Bitcount 字体保存在 fonts/，完整授权保存在 font-licenses/。 -->
+  <script>
+    document.documentElement.classList.remove('no-js');
+    history.scrollRestoration = 'manual';
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      document.documentElement.classList.add('motion-pending');
+      window.entranceFallback = setTimeout(() => document.documentElement.classList.remove('motion-pending'), 3500);
+    }
+  </script>
+  <!-- 外观只在 styles.css 中修改；本文件负责页面结构、文案与交互。 -->
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <!-- 02 整个滚动旅程。id 是交互连接点，改文案时请保留这些 id。 -->
+  <a class="skip-link" href="#computer" id="skip-link">Skip to portfolio</a>
+  <!-- 03 共用系统顶栏：首页和电脑界面只有这一份，不会在转场时换成另一套导航。
+       Logo 与 CYNE OS 分别点击都回首页。Work 下拉分类跟随下方 WORK_CATEGORIES 自动生成。
+       改 About / Contact 的按钮文字可直接改这里；data-app / data-orbit / id 请保留。 -->
+  <header class="header" id="header">
+    <div class="system-brand">
+      <!-- 更换 Logo：替换 art/cyne-logo-silver.png，保留透明背景和原比例即可。 -->
+      <button class="brand" data-orbit aria-label="Cyne logo, return to homepage"><img class="brand-image" src="art/cyne-logo-silver.png" alt="" width="1319" height="1192" decoding="async"></button>
+      <button class="os-name" data-orbit aria-label="CYNE OS, return to homepage">CYNE OS</button>
+    </div>
+    <nav class="nav" aria-label="Portfolio navigation">
+      <div class="work-menu-wrap" id="work-menu-wrap">
+        <button class="system-nav-button" id="work-menu-toggle" data-nav-app="work" aria-expanded="false" aria-controls="work-menu">Work<span class="menu-caret" aria-hidden="true"></span></button>
+        <div class="work-menu" id="work-menu" role="group" aria-label="Work menu" hidden></div>
+      </div>
+      <button class="system-nav-button" data-app="about" data-nav-app="about">About</button>
+      <button class="system-nav-button" data-app="contact" data-nav-app="contact">Contact</button>
+    </nav>
+    <time class="system-clock live-clock" aria-label="New York time">—</time>
+  </header>
+  <main class="journey" id="journey" aria-label="Cyne's personal universe">
+    <div class="camera-stage" id="camera-stage">
+      <!-- 背景与局部修补共用一个镜头；更换图片请看下方 ART 配置。 -->
+      <div class="art-plane" id="cosmic-plane">
+        <img class="cosmic-art" id="cosmic-art" alt="A pink-blue cosmic world inside a monumental old computer, with a tiny person working at a laptop on the planet below." width="1536" height="3072" decoding="sync" fetchpriority="high">
+        <div class="image-repair" aria-hidden="true"><img class="repair-art" alt=""></div>
+      </div>
+      <div class="scene-shade" id="scene-shade"></div>
+      <button class="image-note" id="image-note" data-app="work" aria-label="IMAGE DATA MISSING. Open my personal desktop">IMAGE DATA MISSING.</button>
+      <!-- 04 首页文字：姓名、两行主标题和一句介绍可以直接在这里修改。 -->
+      <section class="hero" id="hero" aria-labelledby="hero-title">
+        <div class="hero-content">
+        <p class="eyebrow">JINGYI CHEN / CYNE</p>
+        <h1 class="hero-title" id="hero-title"><span class="line line-one"><span class="line-reveal">A small human.</span></span><span class="line line-two"><span class="line-reveal">A world of ideas.</span></span></h1>
+        <p class="hero-copy">Product management and UI/UX for AI-powered creative tools.</p>
+        </div>
+      </section>
+      <!-- 05 滑到小桌子时出现的标题。镜头与淡入位置在下方 measure / render 中。 -->
+      <section class="landing-copy" id="landing-copy" aria-labelledby="landing-title" inert>
+        <h2 id="landing-title"><span>A world inside.</span></h2>
+      </section>
+      <button class="computer-hotspot" id="computer-hotspot" aria-label="Open my personal desktop" inert tabindex="-1"></button>
+      <span class="scroll-hint" id="scroll-hint">SCROLL</span>
+      <!-- 06 个人 OS 外壳。左侧导航与正文由下方资料和 VIEWS 自动生成。 -->
+      <section class="screen-portal" id="computer" aria-label="Cyne personal operating system" inert>
+        <div class="os-desktop" id="os-desktop">
+          <div class="os-wallpaper" id="os-wallpaper" aria-hidden="true"><img class="cosmic-art" id="wallpaper-art" alt=""><div class="image-repair"><img class="repair-art" alt=""></div></div>
+          <section class="app-window" id="app-window" aria-labelledby="window-title">
+            <div class="window-bar" id="window-bar">
+              <div class="window-controls">
+                <button class="window-control" id="close-window" data-orbit aria-label="Close desktop and return to orbit">×</button>
+                <button class="window-control minimize" id="minimize-window" aria-label="Minimize window" aria-controls="app-content" aria-expanded="true">−</button>
+                <button class="window-control maximize" id="maximize-window" aria-label="Maximize window">+</button>
+              </div>
+              <span class="window-title" id="window-title">Work</span>
+            </div>
+            <div class="window-layout">
+              <!-- Work 下的分类只筛选作品，不会新增页面；改分类看 WORK_CATEGORIES。 -->
+              <nav class="sidebar" id="sidebar" aria-label="Personal desktop applications"></nav>
+              <div class="app-content" id="app-content" tabindex="-1" aria-label="Application content"></div>
+            </div>
+          </section>
+        </div>
+      </section>
+      <!-- 07 白光 → 黑场粉蓝恢复。方块位置和动画全部放在 styles.css。 -->
+      <div class="signal-transition" id="signal-transition" aria-hidden="true">
+        <div class="whiteout" id="whiteout"></div>
+        <div class="recovery-field" id="recovery-field">
+          <div class="signal-pixels">
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+            <i></i><i></i><i></i><i></i><i></i><i></i>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+  <!-- 08 关闭 JavaScript 时的备用内容；改个人资料时可同步这里。 -->
+  <noscript><article class="no-js-content"><h1>Jingyi Chen / Cyne</h1><p>Product management and UI/UX for AI-powered creative tools.</p><h2>Experience</h2><p>Alibaba / Youku Product Manager Intern, May–August 2026. NYU AI for Biology Research Assistant, July–December 2025.</p><h2>Education</h2><p>NYU Tisch School of the Arts · BFA, Interactive Media Arts · Minor, Film · Expected May 2028.</p><h2>School / Clubs</h2><p>NYU CSSA · Chair of Public Relations · May 2026–present.</p><h2>Selected work</h2><ul><li>Limeo — a wristband-connected fatigue-awareness app concept.</li><li>Memo — a speculative Figma interface for choosing which memories to let go of.</li><li>Mia’s Day — a branching video game about relationships and self-care.</li><li>While the Water Drains — a collaborative music video combining live action and AI imagery.</li><li>Karma — an AI-assisted horror short about guilt.</li><li>The White Door — an AI-generated photo roman about grief and a door to the past.</li><li>Maybe The Last Day — film and projection about belonging in a temporary home.</li><li>Dear Sister — an installation exploring the mixed feelings surrounding new life.</li><li>Tarot Killer — a prank turns into a deadly case of mistaken identity.</li><li>Lost at Home — an immersive first-person narrative about memory and empathy.</li></ul><p><a href="mailto:jc13322@nyu.edu">jc13322@nyu.edu</a> · <a href="https://www.linkedin.com/in/jane-chen-869558337">LinkedIn</a> · <a href="https://www.youtube.com/@Cyne_ART">YouTube</a></p></article></noscript>
+  <!-- 09 下面保留少量 JavaScript：先是可编辑资料，后是筛选、窗口和镜头逻辑。
+       改文字通常只需要改 PROJECTS / EXPERIENCE / EDUCATION / SCHOOL_CLUBS / VIEWS，不需要改镜头代码。
+       详情文字中的 HTML 也是真正的正文；反引号 ` 请成对保留。 -->
+  <script>
+  (() => {
+    'use strict';
+    // 背景文件：替换 art/ 中对应图片即可；更换不同构图时需要重新调镜头锚点。
+    const ART = { cosmos: 'art/cosmic-original.png', repair: 'art/cosmic-label-repair-source.png' };
+    const $ = id => document.getElementById(id);
+    $('cosmic-art').src = ART.cosmos;
+    $('wallpaper-art').src = ART.cosmos;
+    document.querySelectorAll('.repair-art').forEach(image=>image.src=ART.repair);
+    const ICON = {
+      work: '<svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M4 12h11l3-4h13v22H4z" fill="currentColor" fill-opacity=".2" stroke="currentColor" stroke-width="1.5"/><path d="M4 16h27" stroke="currentColor" stroke-width="1.5"/></svg>',
+      about: '<svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="5" y="4" width="26" height="28" rx="3" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.5"/><circle cx="18" cy="13" r="4" stroke="currentColor" stroke-width="1.5"/><path d="M10 26c0-5 16-5 16 0M12 29h12" stroke="currentColor" stroke-width="1.5"/></svg>',
+      experience: '<svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="4" y="12" width="28" height="19" rx="3" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.5"/><path d="M12 12V7h12v5M4 20h28M15 18v5h6v-5" stroke="currentColor" stroke-width="1.5"/></svg>',
+      notes: '<svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><path d="M7 4h16l6 6v22H7z" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.5"/><path d="M23 4v7h6M12 16h12M12 21h12M12 26h8" stroke="currentColor" stroke-width="1.5"/></svg>',
+      contact: '<svg viewBox="0 0 36 36" fill="none" aria-hidden="true"><rect x="3" y="8" width="30" height="22" rx="3" fill="currentColor" fill-opacity=".16" stroke="currentColor" stroke-width="1.5"/><path d="m4 10 14 11 14-11" stroke="currentColor" stroke-width="1.5"/></svg>'
+    };
+    const APPS = [ ['work','Work','Work'], ['about','About','About'], ['contact','Contact','Contact'] ];
+    // 分类 key 用于匹配，label 是网页显示的文字。作品可属于多个分类。
+    const WORK_CATEGORIES = [ ['all','All'], ['art','Art'], ['film','Film'], ['uiux','UI/UX'], ['graphic','Graphic'] ];
+    let selectedWorkCategory = 'all';
+    // 作品资料：复制一个完整对象即可新增。每个对象的名字必须不同。
+    // categories=分类 key 数组；summary=列表的一句简介；intro/body=详情介绍与贡献。
+    // cover.src=art/projects/ 里的真实预览图；cover.alt=图片内容说明。不需要编号。
+    // 没有截图时先省略 cover，不要用其他项目的图片代替。
+    // title/type/year/role/tools/format 都可改；没有年份或工具可保留空字符串。
+    const PROJECTS = {
+      Limeo: {
+        categories:['uiux'],
+        title:'Limeo [Figbuild]', type:'UI/UX · Product prototype', year:'2026',
+        cover:{src:'art/projects/limeo.png',alt:'Limeo prototype showing training readiness, body load, and recovery screens'},
+        summary:'A wristband-connected app concept for noticing fatigue during sport.',
+        intro:'Limeo connects a wristband and mobile app to help people notice fatigue before, during, and after exercise. Created as a team prototype at FigBuild 2026, it explores how quick in-activity alerts can connect to clearer recovery guidance.',
+        role:'Product designer & prototyper', tools:'Figma Make · Remotion', format:'24-hour hackathon',
+        body:`<h2>The design problem</h2><p>How can someone understand their physical load without having to keep checking a screen? The concept separates low-distraction wristband feedback during activity from more detailed explanations in the app.</p><h2>My contribution</h2><ul><li>Defined the product structure, core user flows, and interactions across readiness, training, and recovery.</li><li>Built the interface with Figma Make and created a product demo with Remotion.</li></ul><p>The prototype includes alert preferences, data permissions, and low-confidence states. It is a design concept, not a clinically validated device or diagnostic tool.</p>`
+      },
+      // Memo：Notion 中的 2025 团队 UI 项目；封面为原始设计图，不是 AI 重做的截图。
+      Memo: {
+        categories:['uiux'],
+        title:'Memo', type:'UI/UX · Speculative design', year:'2025',
+        cover:{src:'art/projects/memo.png',alt:'Memo interface screens with soft pink-blue gradients and translucent memory bubbles'},
+        summary:'A speculative interface for choosing which memories to let go of.',
+        intro:'Memo imagines a tool for selecting a person and choosing which memories of them to delete. Built as a team UI project in Figma, it pairs that speculative idea with a soft, personal interface.',
+        role:'UI design · Team project', tools:'Figma', format:'Interactive UI prototype',
+        body:`<h2>Visual direction</h2><p>Pink-blue gradients, translucent forms, and floating bubbles give the interface a dreamlike visual language. The welcome and person-selection screens frame memory as something personal rather than a conventional file archive.</p><p>Memo is a speculative design exercise, not a functioning memory-deletion technology.</p><a class="text-link" href="https://www.figma.com/proto/lVUMbzO7Dk8J9cQWMe6W1v/T3TRAD.-FigBuild-2025?page-id=&amp;node-id=99-11&amp;t=EbLVgDRg8ipoNIhF-1&amp;starting-point-node-id=99%3A11" target="_blank" rel="noopener noreferrer">Open Figma prototype</a>`
+      },
+      MiasDay: {
+        categories:['art'],
+        // 保留你在桌面添加的影片；watch 使用同一个视频 ID，不重复加 ?si。
+        video:{embed:'https://www.youtube.com/embed/04EYjUJ11pE?si=1nQReqoDq_igAmCv',watch:'https://www.youtube.com/watch?v=04EYjUJ11pE'},
+        title:'Mia’s Day', type:'Interactive narrative · Game', year:'2024',
+        cover:{src:'art/projects/mias-day.jpg',alt:'Video preview of the branching narrative game Mia’s Day'},
+        summary:'A branching video game about relationships, self-care, and small decisions.',
+        intro:'Follow Mia, a college student balancing her own needs with the people around her. Choices at key moments lead to different video sequences and endings, turning an ordinary day into a reflection on care, boundaries, and consequences.',
+        role:'Independent game developer', tools:'JavaScript · p5.js · AI-assisted assets', format:'Interactive narrative',
+        body:`<h2>Making the experience</h2><ul><li>Wrote the branching story and mapped how each decision connects to the next scene.</li><li>Built the video navigation and choice buttons in JavaScript/p5.js, with a particle-based opening.</li><li>Combined Midjourney images, Photoshop edits, and Hailuo AI animation into the playable narrative.</li></ul><p>Exhibited at the NYU IMA/ITP Winter Show.</p>`
+      },
+      WhileTheWaterDrains: {
+        categories:['art','film'],
+        // 项目影片：换视频时同时更新 embed 和 watch；播放器不自动播放。
+        video:{embed:'https://www.youtube.com/embed/Q5E_f56TNRg?si=DyjpulEuXdR4Cbfo',watch:'https://www.youtube.com/watch?v=Q5E_f56TNRg'},
+        title:'While the Water Drains', type:'Music video · Creative AI', year:'2025',
+        cover:{src:'art/projects/while-the-water-drains.jpg',alt:'Video preview of While the Water Drains'},
+        summary:'Live action and AI imagery give shape to loss and emotional absence.',
+        intro:'A collaborative music video with musicians from NYU’s Clive Davis Institute. Water becomes a visual language for absence, moving between filmed performances and surreal AI-assisted scenes.',
+        role:'Director of photography · AI post-production', tools:'Runway · Photoshop · Midjourney · Flora', format:'Collaborative music video',
+        body:`<h2>My contribution</h2><ul><li>Helped develop the narrative and visual direction, translating the song into a pitch video and shot list.</li><li>Planned composition, lighting, and camera movement, and served as director of photography.</li><li>Led AI-generated visuals and post-production effects, including floating water, rising-water scenes, and a luminous figure.</li></ul><p>The process moved from lyrics and shared visual references to filming, editing, and AI effects, with feedback from the musicians shaping the final imagery.</p>`
+      },
+      Karma: {
+        categories:['art','film'],
+        // 项目影片：换视频时同时更新 embed 和 watch；播放器不自动播放。
+        video:{embed:'https://www.youtube.com/embed/zGs7fzCDYmk?si=n7zy39tkzDT_ctnh',watch:'https://www.youtube.com/watch?v=zGs7fzCDYmk'},
+        title:'Karma', type:'Horror short · Creative AI', year:'2025',
+        cover:{src:'art/projects/karma.jpg',alt:'Close-up of the protagonist in Karma'},
+        summary:'A horror short where guilt turns ordinary rituals into a haunting.',
+        intro:'Haunted by the harm caused by her rumors, a student seeks comfort in ritual. Red doors, broken prayer beads, and a shifting statue turn that search for relief into a confrontation with her past.',
+        role:'Story & visual development', tools:'AI image / video workflows', format:'AI-assisted short film',
+        body:`<h2>Visual approach</h2><p>The story moves from intimate close-ups to an increasingly enclosed world. Repeated red imagery, match cuts, and a lantern-lit corridor make guilt feel spatial rather than only spoken.</p><p>I developed the premise, storyboard, and shot plan around that progression, testing generated imagery to connect the everyday setting with the supernatural one.</p>`
+      },
+      TheWhiteDoor: {
+        categories:['art','film'],
+        // 项目影片：换视频时同时更新 embed 和 watch；播放器不自动播放。
+        video:{embed:'https://www.youtube.com/embed/miwSMYQskEw?si=C0dxRkX1NRuLpu_L',watch:'https://www.youtube.com/watch?v=miwSMYQskEw'},
+        title:'The White Door', type:'Photo roman · Creative AI', year:'2025',
+        cover:{src:'art/projects/the-white-door.jpg',alt:'A child in a pink dress in The White Door'},
+        summary:'A grieving mother finds a door to the past, but cannot escape her loss.',
+        intro:'While packing away her late daughter’s belongings, a mother discovers a door inside the closet. Beyond it, a white room and a strange dial lead her back to a moment when her child is still alive.',
+        role:'Writer · AI filmmaker', tools:'Runway', format:'AI-generated photo roman',
+        body:`<h2>A loop of grief</h2><p>The reunion cannot last. Her daughter asks to be let go, and the loss repeats. As the mother returns to the doorway, it becomes white again, closing the story into a cycle of longing and the difficulty of release.</p><h2>My contribution</h2><ul><li>Wrote the script, shaping the closet, white room, dial, and returning door into a circular narrative.</li><li>Created the AI imagery using Runway.</li></ul><p>Produced with Tianai Bi.</p>`
+      },
+      // 影像 / 装置作品：列表讲是什么，详情讲概念与制作，不重复同一段声明。
+      MaybeTheLastDay: {
+        categories:['art','film'],
+        // 项目影片：换视频时同时更新 embed 和 watch；播放器不自动播放。
+        video:{embed:'https://www.youtube.com/embed/0uEdN-A0Ogc?si=J-NXXbwx83Dcj2nf',watch:'https://www.youtube.com/watch?v=0uEdN-A0Ogc'},
+        title:'Maybe The Last Day', type:'Film · Projection mapping', year:'2026',
+        cover:{src:'art/projects/maybe-the-last-day.jpg',alt:'Maybe The Last Day title over a view of city buildings'},
+        summary:'A projection-mapped film about the traces that make a temporary room feel like home.',
+        intro:'After years of moving between places, I began looking for belonging in ordinary objects and routines. Through film and projection, a room becomes a place where those small, often overlooked traces can appear.',
+        role:'Artist', tools:'MadMapper · Premiere Pro', format:'Video & projection-mapping installation',
+        body:`<h2>A room before leaving</h2><p>The film follows a last night in a room: its corners, familiar objects, a letter, and the act of leaving. Cups, a cactus, and afternoon music become reminders that a temporary place can still hold a life.</p><p>Projections bring these fragments onto physical objects, giving memory a visible presence within the room.</p>`
+      },
+      DearSister: {
+        categories:['art','film'],
+        // 项目影片：换视频时同时更新 embed 和 watch；播放器不自动播放。
+        video:{embed:'https://www.youtube.com/embed/L0kkFLK3WYM?si=YymnxnreM7rwNFSE',watch:'https://www.youtube.com/watch?v=L0kkFLK3WYM'},
+        title:'Dear Sister', type:'Film · Projection mapping', year:'2026',
+        cover:{src:'art/projects/dear-sister.jpg',alt:'Red imagery surrounding a silhouetted figure in Dear Sister'},
+        summary:'An installation holding the joy, worry, and vulnerability surrounding new life.',
+        intro:'Hearing about my sister’s pregnancy brought joy and worry at once. Dear Sister turns those mixed feelings into a projected inner world, exploring the tenderness and pressure that can surround the arrival of new life.',
+        role:'Artist & creative technologist', tools:'TouchDesigner · MadMapper · Premiere Pro', format:'Video & projection-mapping installation',
+        body:`<h2>From feeling to form</h2><p>Muscle-like textures give the installation a sense of bodily tenderness and vulnerability. Projected imagery creates a space between my own perspective and the imagined world of the baby.</p><ul><li>Created the visuals in TouchDesigner and mapped them onto the physical installation.</li><li>Connected MIDI and OSC signals across Ableton, TouchDesigner, and MadMapper to coordinate changes.</li><li>Composed the final video in Premiere Pro.</li></ul>`
+      },
+      TarotKiller: {
+        categories:['art','film'],
+        // 项目影片：换视频时同时更新 embed 和 watch；播放器不自动播放。
+        video:{embed:'https://www.youtube.com/embed/P-GtRlA4ViE?si=HexC0AWmAkr23mHA',watch:'https://www.youtube.com/watch?v=P-GtRlA4ViE'},
+        title:'Tarot Killer', type:'Narrative short · Film', year:'2026',
+        cover:{src:'art/projects/tarot-killer.jpg',alt:'Video preview of the short film Tarot Killer'},
+        summary:'A prank turns into a deadly case of mistaken identity.',
+        intro:'After finding a Tarot Killer poster, a young man impersonates the killer to scare his friend. She believes the threat is real, and his prank spirals into tragedy.',
+        role:'Director · Editor · Scriptwriter', tools:'Premiere Pro', format:'Short film',
+        // 剧情以你确认的成片结局为准；PDF《THE SEVEN OF SWORDS》用于核对剧本与悬念设置。
+        body:`<h2>Intention and perception</h2><p>What he sees as a performance becomes a real threat to her. Mistaking her friend for the killer, she kills him in what she believes is self-defense. The story turns on that tragic gap between intention and fear.</p><h2>My contribution</h2><ul><li>Wrote the screenplay, using tarot cards, a pursuit, and a doorway reveal to build suspense.</li><li>Directed the film and edited the final cut in Premiere Pro.</li></ul><h2>Credits</h2><p>Produced by Jane Chen, with performances by Tianai Bi and Artus Yeh.</p>`
+      },
+      lost: {
+        categories:['art'],
+        title:'Lost at Home', type:'Immersive narrative · Memory', year:'',
+        // 还没有找到这件作品的真实截图。拿到后加 cover:{src:'art/projects/lost-at-home.jpg',alt:'说明画面内容'}。
+        summary:'A first-person story about memory, isolation, and empathy.',
+        intro:'An immersive first-person narrative about memory, aging, and the loss of familiarity.',
+        role:'Creator', tools:'', format:'Immersive game',
+        body:`<p>The work explores disorientation through a familiar home, drawing on the isolation of quarantine. It is an artistic narrative, not a clinical simulation.</p>`
+      },
+      // Graphic 示例：只在 Graphic 分类里出现，避免被当作你的正式作品。
+      // 替换图片、文案、角色和工具后，把 isTemplate 改成 false，即可进入 All。
+      graphicTemplate: {
+        categories:['graphic'], isTemplate:true,
+        title:'Small Worlds', type:'Graphic · Template', year:'',
+        cover:{src:'art/projects/graphic-template.png',alt:'Sample pixel poster: Small Worlds, a pink and blue planet on black',portrait:true},
+        summary:'A sample poster layout for your next graphic project.',
+        intro:'An editable example for a poster, visual identity, or editorial project. Replace the artwork and text with your own work.',
+        role:'Your role', tools:'Your tools', format:'Poster study',
+        body:`<h2>The brief</h2><p>Describe who the project was for and what the design needed to communicate.</p><h2>The approach</h2><p>Explain your concept, typography, color choices, and the part you made.</p><h2>The outcome</h2><p>Add the final deliverables and any results you can verify.</p>`
+      }
+    };
+    // 其他影片链接：已经在 PROJECTS 里展示的影片会自动去重。
+    const FILMS = [
+      {title:'Dear Sister',url:'https://www.youtube.com/watch?v=L0kkFLK3WYM'},
+      {title:'Maybe The Last Day',url:'https://www.youtube.com/watch?v=0uEdN-A0Ogc'},
+      {title:'Tarot Killer',url:'https://www.youtube.com/watch?v=P-GtRlA4ViE'}
+    ];
+    // 工作与研究经历：About 和 Résumé 共用这一份资料，只改一次即可同步。
+    // 每条用 h3（机构）、职位、日期、职责 / 成果列表；数字沿用已有履历，不填猜测。
+    const EXPERIENCE = `
+      <section class="experience-entry" aria-labelledby="youku-role"><div class="role"><div><h3 id="youku-role">Alibaba Group / Youku</h3><p>Product Manager Intern</p></div><p>May–Aug 2026</p></div><p>Worked on AI creative tools, translating business needs, competitive research, and model constraints into product requirements.</p><ul><li>Wrote PRDs and acceptance criteria across six homepage / Skill Library iterations, coordinating reviews with 20+ cross-functional stakeholders.</li><li>Prioritized P0/P1 requirements and phase-one / phase-two tradeoffs against engineering effort and version goals.</li><li>Contributed to launched creation-page time filtering and Inspiration Library / deep-search features, plus an adopted notification framework.</li><li>Evaluated motion-transfer and VFX feasibility across 19 clips, six models, and approximately 152 generations; documented failure modes, input requirements, and technical limits.</li></ul></section>
+      <section class="experience-entry" aria-labelledby="research-role"><div class="role"><div><h3 id="research-role">NYU · AI for Biology</h3><p>Research Assistant</p></div><p>Jul–Dec 2025</p></div><ul><li>Created publication-quality data visualizations for a manuscript and research presentations.</li><li>Designed the UI/UX and front-end visual system for an internal Python-based research tool.</li></ul></section>`;
+    // 教育：学校、专业、毕业时间与荣誉。不要把社团写进工作经历。
+    const EDUCATION = `
+      <section class="experience-entry" aria-labelledby="education-school"><div class="role"><div><h3 id="education-school">New York University</h3><p>Tisch School of the Arts</p></div><p>Expected May 2028</p></div><p>BFA, Interactive Media Arts · Minor, Film</p><p>GPA 3.98 · Dean’s List, 2025 & 2026</p></section>`;
+    // School / Clubs：只放已确认的校园与社团经历。新增时可复制这一完整 section。
+    const SCHOOL_CLUBS = `
+      <section class="experience-entry" aria-labelledby="cssa-role"><div class="role"><div><h3 id="cssa-role">NYU CSSA</h3><p>Chair of Public Relations</p></div><p>May 2026–present</p></div><ul><li>Lead editorial planning and community outreach for a WeChat audience of 50,000 subscribers.</li><li>Coordinate visual standards and cross-department campaign schedules.</li><li>Pilot AI-assisted copy, visual, and publishing workflows.</li></ul></section>`;
+    function escapeHTML(text) {
+      return String(text).replace(/[&<>"']/g,char=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[char]));
+    }
+    function filteredProjects(category=selectedWorkCategory) {
+      return Object.entries(PROJECTS).filter(([,p])=>category==='all'?!p.isTemplate:p.categories.includes(category));
+    }
+    function extraFilms(category=selectedWorkCategory) {
+      if(category!=='all'&&category!=='film') return [];
+      const featured=new Set(Object.values(PROJECTS).filter(p=>p.video).map(p=>new URL(p.video.watch).searchParams.get('v')));
+      return FILMS.filter(f=>!featured.has(new URL(f.url).searchParams.get('v')));
+    }
+    function renderWork() {
+      const projects=filteredProjects();
+      // 真实项目图放在列表左侧；手机自动放到文字上方。不加播放按钮，整行打开详情。
+      const rows=projects.map(([id,p])=>`<button class="project-row${p.cover?'':' no-cover'}" data-project="${id}" aria-label="Read ${escapeHTML(p.title)}${p.isTemplate?' — template':''}">${p.cover?`<span class="project-preview${p.cover.portrait?' portrait-preview':''}"><img src="${escapeHTML(p.cover.src)}" alt="${escapeHTML(p.cover.alt)}" loading="lazy" decoding="async"></span>`:''}<span class="project-copy">${p.isTemplate?'<span class="template-label">Template</span>':''}<strong>${escapeHTML(p.title)}</strong><span class="description">${escapeHTML(p.summary)}</span><span class="meta">${escapeHTML(p.type)}${p.year?' / '+escapeHTML(p.year):''}</span></span><span class="open-mark" aria-hidden="true">+</span></button>`).join('');
+      const archive=extraFilms();
+      const films=archive.length?`<h2>More films</h2><div class="film-links">${archive.map(f=>`<a href="${f.url}" target="_blank" rel="noopener noreferrer">${escapeHTML(f.title)}</a>`).join('')}</div>`:'';
+      return `<h1>Selected work.</h1>${selectedWorkCategory==='all'?'<p class="intro">Product prototypes, interactive stories, and films.</p>':''}${rows?`<div class="project-list">${rows}</div>`:''}${films}${!rows&&!films?'<p class="work-empty">No projects in this category.</p>':''}`;
+    }
+    // 页面正文：About、Contact、Résumé 的文字与链接在这里修改。
+    const VIEWS = {
+      work: renderWork,
+      // About：先明确职业方向，再按 Experience / Education / School / Clubs 展开。
+      // 三块详细资料都引用上方常量；改介绍只改下面两个 p。
+      about: () => `
+        <h1>Hi, I’m Jingyi.</h1>
+        <p class="intro">I also go by Cyne. My focus is product management and UI/UX for AI-powered creative tools. I study Interactive Media Arts at NYU Tisch, with a minor in Film.</p>
+        <p class="intro">I turn research and technical constraints into product requirements, user flows, and prototypes. Making films and interactive stories gives me a creator’s perspective on the tools I help shape.</p>
+        <section class="about-section" aria-labelledby="about-experience"><h2 id="about-experience">Experience</h2>${EXPERIENCE}</section>
+        <section class="about-section" aria-labelledby="about-education"><h2 id="about-education">Education</h2>${EDUCATION}</section>
+        <section class="about-section" aria-labelledby="about-clubs"><h2 id="about-clubs">School / Clubs</h2>${SCHOOL_CLUBS}</section>
+        <div class="about-actions"><button class="text-link" data-view="resume">Read my résumé</button></div>
+      `,
+      // Contact：改邮箱与社交链接时，同时改 href 和显示的文字。
+      contact: () => `
+        <h1>Say hello.</h1>
+        <a class="contact-email" href="mailto:jc13322@nyu.edu">jc13322@nyu.edu</a>
+        <a class="contact-row" href="https://www.linkedin.com/in/jane-chen-869558337" target="_blank" rel="noopener noreferrer">LinkedIn</a>
+        <a class="contact-row" href="https://www.youtube.com/@Cyne_ART" target="_blank" rel="noopener noreferrer">YouTube</a>
+      `,
+      // Résumé：完整履历，保留打印按钮与 EXPERIENCE 插入位置。
+      resume: () => `
+        <div class="resume-heading">
+        <div>
+        <p class="eyebrow">RÉSUMÉ</p>
+        <h1>Jingyi Chen</h1>
+        <p>Creative AI · Product Management · UI/UX<br>
+        <a href="mailto:jc13322@nyu.edu">jc13322@nyu.edu</a>
+        </p>
+        </div>
+        <button class="secondary-button" id="print-resume">Print / save PDF</button>
+        </div>
+        <h2>Education</h2>
+        ${EDUCATION}
+        <h2>Experience</h2>${EXPERIENCE}<h2>Selected projects</h2>
+        <h3>Limeo / FigBuild 2026 · Product Designer & Prototyper</h3>
+        <p>Defined product structure, core flows, and interactions for a wristband-connected fatigue-awareness app concept in a 24-hour hackathon. Built the interface with Figma Make and produced a demo with Remotion.</p>
+        <h3>While the Water Drains · Director of Photography & AI Post-production · 2025</h3>
+        <p>Collaborative music video with NYU Clive Davis musicians. Developed visual direction and a shot plan, filmed the live-action material, and led AI-generated imagery and post-production effects.</p>
+        <h3>Mia’s Day · Independent Game Developer · 2024</h3>
+        <p>Created a branching narrative game in JavaScript/p5.js, including player decision flows and AI-assisted visual / animated assets. Exhibited at the NYU IMA/ITP Winter Show.</p>
+        <h3>Lost at Home · Creator</h3>
+        <p>Immersive first-person narrative about memory, aging, isolation, and empathy.</p>
+        <h2>School / Clubs</h2>${SCHOOL_CLUBS}
+        <h2>Tools & practice</h2>
+        <p>Figma / Figma Make · Adobe Creative Cloud · Unity · Maya · Remotion · JavaScript / p5.js · Video production & editing · AI image / video workflows · Model evaluation · Workflow automation · Product requirements & prototyping</p>
+        <h2>Languages</h2>
+        <p>Mandarin (native) · English (fluent) · Spanish & German (basic)</p>
+      `
+    };
+
+    // 10 顶栏下拉菜单与窗口侧栏共用同一份分类资料，改 WORK_CATEGORIES 会同时更新。
+    $('sidebar').innerHTML = APPS.map(([id,label]) => `<button data-app="${id}">${ICON[id]}<span>${label}</span></button>${id==='work'?`<div class="work-sublist" id="work-categories" role="group" aria-label="Work categories">${WORK_CATEGORIES.map(([key,name])=>`<button data-category="${key}" aria-pressed="${key==='all'}" aria-controls="app-content">${name}</button>`).join('')}</div>`:''}`).join('')+'<span class="sr-only" id="work-filter-status" role="status"></span>';
+    $('work-menu').innerHTML = WORK_CATEGORIES.map(([key,name])=>`<button data-work-category="${key}" aria-pressed="${key==='all'}" aria-controls="app-content"><span>${escapeHTML(name)}</span><span class="menu-check" aria-hidden="true">✓</span></button>`).join('');
+    let currentApp = 'work', currentView = 'work';
+    function updateWorkCategories() {
+      $('work-categories').hidden=currentApp!=='work'||$('app-window').classList.contains('minimized');
+      $('work-filter-status').hidden=$('work-categories').hidden;
+      document.querySelectorAll('[data-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.category===selectedWorkCategory)));
+      document.querySelectorAll('[data-work-category]').forEach(b=>b.setAttribute('aria-pressed',String(b.dataset.workCategory===selectedWorkCategory)));
+    }
+    function setWorkCategory(category, focus = false) {
+      if(!WORK_CATEGORIES.some(([key])=>key===category)) return;
+      selectedWorkCategory=category;
+      setApp('work',focus);
+      const count=filteredProjects().length+extraFilms().length;
+      const label=WORK_CATEGORIES.find(([key])=>key===category)[1];
+      $('work-filter-status').textContent=`${count} ${count===1?'work':'works'} in ${label}.`;
+      writeRoute('work');
+    }
+    function setApp(id, focus = false) {
+      if (!VIEWS[id]) return;
+      currentView = id;
+      currentApp = id === 'resume' ? 'about' : id;
+      $('app-content').innerHTML = VIEWS[id]();
+      $('window-title').textContent = id === 'resume' ? 'Jingyi Chen — Résumé' : APPS.find(a => a[0] === id)[2];
+      $('app-content').scrollTop = 0;
+      $('app-window').hidden = false;
+      restoreContent();
+      updateNavigation();
+      if (focus) $('app-content').focus({preventScroll:true});
+    }
+    function updateNavigation() {
+      const inDesktop=$('camera-stage').classList.contains('os-active');
+      document.querySelectorAll('#sidebar [data-app]').forEach(b => {
+        if (b.dataset.app === currentApp) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+      });
+      document.querySelectorAll('[data-nav-app]').forEach(b=>{
+        if(inDesktop&&b.dataset.navApp===currentApp) b.setAttribute('aria-current','page'); else b.removeAttribute('aria-current');
+      });
+    }
+    function showProject(id) {
+      const p = PROJECTS[id];
+      if (!p) return;
+      currentView = id;
+      $('window-title').textContent = p.title;
+      // 有 video 配置的作品才插入播放器；切换页面会移除 iframe，停止播放。
+      const media=p.video?`<div class="project-media"><div class="project-video"><iframe width="560" height="315" src="${p.video.embed}" title="${escapeHTML(p.title)} — project film" loading="lazy" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe></div><a class="video-link" href="${p.video.watch}" target="_blank" rel="noopener noreferrer">Watch on YouTube</a></div>`:p.cover?`<figure class="project-image${p.cover.portrait?' portrait-image':''}"><img src="${escapeHTML(p.cover.src)}" alt="${escapeHTML(p.cover.alt)}" decoding="async"></figure>`:'';
+      $('app-content').innerHTML = `<button class="back-button" data-view="work">Back to work</button><p class="eyebrow">${escapeHTML(p.type.toUpperCase())}${p.year ? ' / '+escapeHTML(p.year) : ''}</p><h1>${escapeHTML(p.title)}</h1><p class="intro">${escapeHTML(p.intro)}</p>${media}<div class="project-facts">${p.role?`<div><span>ROLE</span>${escapeHTML(p.role)}</div>`:''}${p.tools?`<div><span>TOOLS</span>${escapeHTML(p.tools)}</div>`:''}${p.format?`<div><span>FORMAT</span>${escapeHTML(p.format)}</div>`:''}</div>${p.body}`;
+      restoreContent();
+      $('app-content').scrollTop = 0;
+      $('app-content').focus({preventScroll:true});
+    }
+    setApp('work');
+
+    function fitTitle() {
+      const title=$('hero-title');
+      title.style.removeProperty('--title-fit');
+      const naturalSize=parseFloat(getComputedStyle(title).fontSize);
+      const available=document.querySelector('.hero-content').clientWidth;
+      const width=Math.max(...[...title.querySelectorAll('.line')].map(line=>line.offsetWidth));
+      if(width>available) title.style.setProperty('--title-fit',(naturalSize*(available-1)/width)+'px');
+    }
+    function loadHeadingFont() {
+      const family='Bitcount Grid Single';
+      document.fonts.load(`400 64px "${family}"`,'A small human. A world of ideas.').then(faces=>{
+        document.documentElement.dataset.headingFontLoaded=faces.some(face=>face.family===family&&face.status==='loaded')?family:'error';
+        fitTitle();
+      }).catch(()=>{document.documentElement.dataset.headingFontLoaded='error';});
+    }
+    loadHeadingFont();
+    document.fonts.ready.then(fitTitle);
+    document.fonts.addEventListener('loadingdone',fitTitle);
+
+    // 11 镜头 / 转场：不是个人文案。改背景构图才需要调整 anchor 与开屏上沿。
+    const stage = $('camera-stage'), journey = $('journey');
+    const portal = $('computer'), hero = $('hero'), landing = $('landing-copy');
+    const clamp = (n,min=0,max=1) => Math.max(min,Math.min(max,n));
+    const mix = (a,b,t) => a+(b-a)*t;
+    const smooth = t => { t=clamp(t); return t*t*(3-2*t); };
+    const phase = (p,a,b) => smooth((p-a)/(b-a));
+    const motion = matchMedia('(prefers-reduced-motion: reduce)');
+    let W=innerWidth, H=innerHeight, distance=1, progress=0, frame=0, osActive=false, routeFocus=false, orbitTop=320;
+    const signal=$('signal-transition');
+    let recoveryStart=-Infinity, recoveryArmed=true;
+    function render() {
+      frame=0;
+      const p=progress=clamp(scrollY/distance);
+      const now=performance.now();
+      const mobile=W<620;
+      const base=Math.max(W/1536,H/(mobile?1800:1300));
+      const pan=phase(p,0,.49);
+      const initialTop=orbitTop;
+      const finalTop=Math.max(initialTop,3072-H/base);
+      const originX=(W-1536*base)/2;
+      const deskX=mobile?clamp(W*.68-756.75*base,W-1536*base,0):originX;
+      const planeX=mix(originX,deskX,pan);
+      const planeY=-mix(initialTop,finalTop,pan)*base;
+      const anchor=[756.75,2579.625];
+      const originalCenter=[planeX+anchor[0]*base,planeY+anchor[1]*base];
+      const approach=phase(p,.55,.73);
+      const aim=phase(p,.55,.69);
+      // Never blow the 48px painted laptop screen up to viewport size.
+      // White light takes over before the modest 6x approach becomes blurry.
+      const scale=motion.matches?base:base*Math.exp(Math.log(6)*approach);
+      const cameraX=mix(originalCenter[0],W/2,aim);
+      const cameraY=mix(originalCenter[1],H/2,aim);
+      const tx=cameraX-anchor[0]*scale,ty=cameraY-anchor[1]*scale;
+      $('cosmic-plane').style.transform='matrix('+scale+',0,0,'+scale+','+tx+','+ty+')';
+      $('cosmic-plane').style.opacity=motion.matches?1-phase(p,.82,1):1-phase(p,.72,.77);
+      // One short, localized signal burst per forward pass. The brief timed
+      // handoff also survives quick clicks/End; it never locks page scrolling.
+      if(motion.matches||p<.74) {
+        recoveryStart=-Infinity; recoveryArmed=true;
+        signal.classList.remove('signal-active');
+      } else if(p>=.79&&recoveryArmed) {
+        recoveryStart=now; recoveryArmed=false;
+        signal.classList.add('signal-active');
+      }
+      const recoveryAge=now-recoveryStart;
+      const recovering=Number.isFinite(recoveryStart)&&recoveryAge<1040;
+      const handoff=Number.isFinite(recoveryStart)?phase(recoveryAge,760,1040):1;
+      const reveal=motion.matches?phase(p,.82,1):phase(p,.90,.99)*handoff;
+      signal.style.opacity=1-reveal;
+      $('whiteout').style.opacity=motion.matches?0:phase(p,.585,.72);
+      $('recovery-field').style.opacity=motion.matches?0:phase(p,.74,.81);
+      stage.dataset.transition=motion.matches?(p<.82?'orbit':'os'):p<.55?'orbit':p<.585?'approach':p<.74?'whiteout':reveal<.999?'recovery':'os';
+      portal.style.width=W+'px'; portal.style.height=H+'px';
+      portal.style.opacity=motion.matches?reveal:phase(p,.81,.88);
+      portal.classList.toggle('fullscreen',p>.999);
+      const wallpaperScale=Math.max(W/1536,H/3072);
+      $('os-wallpaper').style.transform='matrix('+wallpaperScale+',0,0,'+wallpaperScale+','+((W-1536*wallpaperScale)/2)+','+((H-3072*wallpaperScale)*.32)+')';
+      const heroOpacity=1-phase(p,.06,.2);
+      hero.style.opacity=heroOpacity;
+      hero.style.transform=`translateY(${-24*phase(p,.06,.2)}px)`;
+      hero.inert=p>.16;
+      $('image-note').style.opacity=1-phase(p,.14,.26);
+      $('image-note').inert=p>.2;
+      const landingOpacity=phase(p,.32,.41)*(1-phase(p,.53,.61));
+      landing.style.opacity=landingOpacity;
+      landing.style.transform=`translateY(${16*(1-phase(p,.32,.41))-14*phase(p,.53,.61)}px)`;
+      landing.inert=p<.36||p>.57;
+      $('computer-hotspot').style.left=(cameraX-24)+'px';
+      $('computer-hotspot').style.top=(cameraY-24)+'px';
+      $('computer-hotspot').style.opacity=landingOpacity;
+      $('computer-hotspot').inert=landing.inert;
+      $('computer-hotspot').tabIndex=landing.inert?-1:0;
+      const chromeOpacity=1-phase(p,.54,.67);
+      // 共用顶栏固定在镜头外；首页、白光、恢复和 OS 状态都保持同样的位置。
+      $('scene-shade').style.opacity=1-phase(p,.54,.7);
+      $('scroll-hint').style.opacity=chromeOpacity;
+      $('scroll-hint').textContent=p<.2?'SCROLL':'KEEP SCROLLING';
+      const active=p>.999&&reveal>.999;
+      portal.inert=!active;
+      if (active!==osActive) {
+        osActive=active;
+        stage.classList.toggle('os-active',active);
+        updateNavigation();
+        if (active&&routeFocus) { $('app-content').focus({preventScroll:true}); routeFocus=false; }
+      }
+      if(recovering) requestRender();
+    }
+    function requestRender() { if (!frame) frame=requestAnimationFrame(render); }
+    function measure() {
+      W=stage.clientWidth; H=stage.clientHeight;
+      distance=journey.offsetHeight-H;
+      // The giant monitor begins at image y≈384. Keep its opening rim below
+      // the header with 24px of black breathing room, regardless of viewport.
+      const base=Math.max(W/1536,H/(W<620?1800:1300));
+      const headerBottom=$('header').getBoundingClientRect().bottom-stage.getBoundingClientRect().top;
+      orbitTop=Math.min(W<620?180:320,384-(headerBottom+24)/base);
+      fitTitle();
+      if(W<620) { $('app-window').style.left=''; $('app-window').style.top=''; $('app-window').style.transform=''; }
+      requestRender();
+    }
+    addEventListener('resize',measure,{passive:true});
+    addEventListener('scroll',requestRender,{passive:true});
+    function goTo(p) {
+      closeMenu(false);
+      scrollTo({top:distance*p,behavior:motion.matches?'instant':'smooth'});
+    }
+    function writeRoute(route) {
+      // Some browsers restrict History API changes when opened directly as file://.
+      try { history.replaceState(null,'',route?'#'+route:location.pathname); } catch (_) { /* The local experience still works without a shareable fragment. */ }
+    }
+    function enterApp(id) {
+      if(!VIEWS[id]) return;
+      closeMenu(false);
+      setApp(id,osActive);
+      if (!osActive) { routeFocus=true; goTo(1); }
+      writeRoute(id);
+    }
+    $('computer-hotspot').addEventListener('click',()=>enterApp('work'));
+    $('skip-link').addEventListener('click',event=>{event.preventDefault(); enterApp('work');});
+    document.addEventListener('click',event=>{
+      const appButton=event.target.closest('[data-app]');
+      const viewButton=event.target.closest('[data-view]');
+      const projectButton=event.target.closest('[data-project]');
+      const categoryButton=event.target.closest('[data-category]');
+      const workMenuButton=event.target.closest('[data-work-category]');
+      if (appButton) enterApp(appButton.dataset.app);
+      if (viewButton) setApp(viewButton.dataset.view,true);
+      if (projectButton) showProject(projectButton.dataset.project);
+      if (categoryButton) setWorkCategory(categoryButton.dataset.category);
+      if (workMenuButton) {
+        setWorkCategory(workMenuButton.dataset.workCategory,osActive);
+        closeMenu(false);
+        if(!osActive) { routeFocus=true; goTo(1); }
+      }
+      if (event.target.closest('[data-orbit]')) { routeFocus=false; goTo(0); writeRoute(''); }
+      if (event.target.closest('#print-resume')) print();
+    });
+    function restoreContent() {
+      $('app-window').classList.remove('minimized');
+      $('minimize-window').setAttribute('aria-label','Minimize window');
+      $('minimize-window').setAttribute('aria-expanded','true');
+      updateWorkCategories();
+    }
+    $('minimize-window').addEventListener('click',()=>{
+      const minimized=$('app-window').classList.toggle('minimized');
+      $('app-window').classList.remove('maximized');
+      $('maximize-window').setAttribute('aria-label','Maximize window');
+      $('minimize-window').setAttribute('aria-label',minimized?'Expand window':'Minimize window');
+      $('minimize-window').setAttribute('aria-expanded',minimized?'false':'true');
+      updateWorkCategories();
+    });
+    $('maximize-window').addEventListener('click',()=>{ restoreContent(); $('app-window').classList.toggle('maximized'); $('maximize-window').setAttribute('aria-label',$('app-window').classList.contains('maximized')?'Restore window':'Maximize window'); });
+    let drag;
+    $('window-bar').addEventListener('pointerdown',event=>{
+      if (event.target.closest('button')||W<620||$('app-window').classList.contains('maximized')) return;
+      const rect=$('app-window').getBoundingClientRect();
+      drag={x:event.clientX,y:event.clientY,left:rect.left,top:rect.top};
+      $('window-bar').setPointerCapture(event.pointerId);
+    });
+    $('window-bar').addEventListener('pointermove',event=>{
+      if (!drag) return;
+      const app=$('app-window');
+      app.style.transform='none';
+      app.style.left=clamp(drag.left+event.clientX-drag.x,8,W-app.offsetWidth-8)+'px';
+      app.style.top=clamp(drag.top+event.clientY-drag.y,50,H-140)+'px';
+    });
+    $('window-bar').addEventListener('pointerup',()=>drag=null);
+    $('window-bar').addEventListener('pointercancel',()=>drag=null);
+    // 12 Work 下拉菜单：点击、键盘方向键、Esc 和点外部都可操作；手机也使用同一顶栏。
+    const menuWrap=$('work-menu-wrap'), menu=$('work-menu'), toggle=$('work-menu-toggle');
+    function closeMenu(restoreFocus=true) {
+      const wasOpen=!menu.hidden;
+      menu.hidden=true;
+      toggle.setAttribute('aria-expanded','false');
+      if (wasOpen&&restoreFocus) toggle.focus({preventScroll:true});
+    }
+    function openMenu(focusItem=false,last=false) {
+      menu.hidden=false;
+      toggle.setAttribute('aria-expanded','true');
+      if(focusItem) {
+        const items=[...menu.querySelectorAll('button')];
+        (last?items.at(-1):items[0]).focus({preventScroll:true});
+      }
+    }
+    toggle.addEventListener('click',()=>{
+      if(menu.hidden) openMenu(); else closeMenu();
+    });
+    toggle.addEventListener('keydown',event=>{
+      if(event.key==='ArrowDown'||event.key==='ArrowUp') { event.preventDefault(); openMenu(true,event.key==='ArrowUp'); }
+    });
+    menu.addEventListener('keydown',event=>{
+      if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key)) return;
+      event.preventDefault();
+      const items=[...menu.querySelectorAll('button')], index=items.indexOf(document.activeElement);
+      const next=event.key==='Home'?0:event.key==='End'?items.length-1:(index+(event.key==='ArrowDown'?1:-1)+items.length)%items.length;
+      items[next].focus({preventScroll:true});
+    });
+    menuWrap.addEventListener('focusout',event=>{if(!menuWrap.contains(event.relatedTarget)) closeMenu(false);});
+    document.addEventListener('keydown',event=>{if(event.key==='Escape'&&!menu.hidden) { event.preventDefault(); closeMenu(); }});
+    document.addEventListener('pointerdown',event=>{if(!menuWrap.contains(event.target)) closeMenu(false);});
+    addEventListener('resize',()=>closeMenu(false),{passive:true});
+    function updateClock() {
+      const now=new Date();
+      const time=new Intl.DateTimeFormat('en-US',{timeZone:'America/New_York',hour:'numeric',minute:'2-digit'}).format(now);
+      document.querySelectorAll('.live-clock').forEach(el=>{el.textContent=time; el.dateTime=now.toISOString();});
+    }
+    updateClock(); setInterval(updateClock,30000);
+    document.querySelector('.hero-copy').addEventListener('animationend',event=>{if(event.animationName==='enter-copy'){clearTimeout(window.entranceFallback);document.documentElement.classList.remove('motion-pending');}});
+    closeMenu(false); measure(); render();
+    const initialHash=location.hash.slice(1);
+    const initialView=({experience:'about',notes:'work'})[initialHash]||initialHash;
+    if(VIEWS[initialView]) { setApp(initialView); if(initialView!==initialHash)writeRoute(initialView); requestAnimationFrame(()=>{recoveryArmed=false;scrollTo({top:distance,behavior:'instant'});}); }
+    motion.addEventListener('change',requestRender);
+  })();
+  </script>
+</body>
+</html>
