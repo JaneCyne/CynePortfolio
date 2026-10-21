@@ -87,17 +87,7 @@
           </section>
         </div>
       </section>
-      <!-- 07 白光 → 黑场粉蓝恢复。方块位置和动画全部放在 styles.css。 -->
-      <div class="signal-transition" id="signal-transition" aria-hidden="true">
-        <div class="whiteout" id="whiteout"></div>
-        <div class="recovery-field" id="recovery-field">
-          <div class="signal-pixels">
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-            <i></i><i></i><i></i><i></i><i></i><i></i>
-          </div>
-        </div>
-      </div>
+      <!-- 07 镜头推进后直接淡入 OS，不使用闪白、黑场或像素加载遮罩。 -->
     </div>
   </main>
   <!-- 08 关闭 JavaScript 时的备用内容；改个人资料时可同步这里。 -->
@@ -420,12 +410,9 @@
     const phase = (p,a,b) => smooth((p-a)/(b-a));
     const motion = matchMedia('(prefers-reduced-motion: reduce)');
     let W=innerWidth, H=innerHeight, distance=1, progress=0, frame=0, osActive=false, routeFocus=false, orbitTop=320;
-    const signal=$('signal-transition');
-    let recoveryStart=-Infinity, recoveryArmed=true;
     function render() {
       frame=0;
       const p=progress=clamp(scrollY/distance);
-      const now=performance.now();
       const mobile=W<620;
       const base=Math.max(W/1536,H/(mobile?1800:1300));
       const pan=phase(p,0,.49);
@@ -439,33 +426,19 @@
       const originalCenter=[planeX+anchor[0]*base,planeY+anchor[1]*base];
       const approach=phase(p,.55,.73);
       const aim=phase(p,.55,.69);
-      // Never blow the 48px painted laptop screen up to viewport size.
-      // White light takes over before the modest 6x approach becomes blurry.
+      // Keep the laptop zoom modest; blend the OS over the scene as we approach.
+      // The transition follows scroll position in both directions, with no loading timer.
       const scale=motion.matches?base:base*Math.exp(Math.log(6)*approach);
       const cameraX=mix(originalCenter[0],W/2,aim);
       const cameraY=mix(originalCenter[1],H/2,aim);
       const tx=cameraX-anchor[0]*scale,ty=cameraY-anchor[1]*scale;
       $('cosmic-plane').style.transform='matrix('+scale+',0,0,'+scale+','+tx+','+ty+')';
-      $('cosmic-plane').style.opacity=motion.matches?1-phase(p,.82,1):1-phase(p,.72,.77);
-      // One short, localized signal burst per forward pass. The brief timed
-      // handoff also survives quick clicks/End; it never locks page scrolling.
-      if(motion.matches||p<.74) {
-        recoveryStart=-Infinity; recoveryArmed=true;
-        signal.classList.remove('signal-active');
-      } else if(p>=.79&&recoveryArmed) {
-        recoveryStart=now; recoveryArmed=false;
-        signal.classList.add('signal-active');
-      }
-      const recoveryAge=now-recoveryStart;
-      const recovering=Number.isFinite(recoveryStart)&&recoveryAge<1040;
-      const handoff=Number.isFinite(recoveryStart)?phase(recoveryAge,760,1040):1;
-      const reveal=motion.matches?phase(p,.82,1):phase(p,.90,.99)*handoff;
-      signal.style.opacity=1-reveal;
-      $('whiteout').style.opacity=motion.matches?0:phase(p,.585,.72);
-      $('recovery-field').style.opacity=motion.matches?0:phase(p,.74,.81);
-      stage.dataset.transition=motion.matches?(p<.82?'orbit':'os'):p<.55?'orbit':p<.585?'approach':p<.74?'whiteout':reveal<.999?'recovery':'os';
+      const reveal=motion.matches?phase(p,.82,1):phase(p,.68,1);
+      // Keep the artwork underneath the fading OS so there is no black-frame gap.
+      $('cosmic-plane').style.opacity=1;
+      stage.dataset.transition=p<.55?'orbit':reveal===0?'approach':reveal<.999?'crossfade':'os';
       portal.style.width=W+'px'; portal.style.height=H+'px';
-      portal.style.opacity=motion.matches?reveal:phase(p,.81,.88);
+      portal.style.opacity=reveal;
       portal.classList.toggle('fullscreen',p>.999);
       const wallpaperScale=Math.max(W/1536,H/3072);
       $('os-wallpaper').style.transform='matrix('+wallpaperScale+',0,0,'+wallpaperScale+','+((W-1536*wallpaperScale)/2)+','+((H-3072*wallpaperScale)*.32)+')';
@@ -485,7 +458,7 @@
       $('computer-hotspot').inert=landing.inert;
       $('computer-hotspot').tabIndex=landing.inert?-1:0;
       const chromeOpacity=1-phase(p,.54,.67);
-      // 共用顶栏固定在镜头外；首页、白光、恢复和 OS 状态都保持同样的位置。
+      // 共用顶栏固定在镜头外；首页、镜头推进和 OS 状态都保持同样的位置。
       $('scene-shade').style.opacity=1-phase(p,.54,.7);
       $('scroll-hint').style.opacity=chromeOpacity;
       $('scroll-hint').textContent=p<.2?'SCROLL':'KEEP SCROLLING';
@@ -497,7 +470,6 @@
         updateNavigation();
         if (active&&routeFocus) { $('app-content').focus({preventScroll:true}); routeFocus=false; }
       }
-      if(recovering) requestRender();
     }
     function requestRender() { if (!frame) frame=requestAnimationFrame(render); }
     function measure() {
@@ -623,7 +595,7 @@
     closeMenu(false); measure(); render();
     const initialHash=location.hash.slice(1);
     const initialView=({experience:'about',notes:'work'})[initialHash]||initialHash;
-    if(VIEWS[initialView]) { setApp(initialView); if(initialView!==initialHash)writeRoute(initialView); requestAnimationFrame(()=>{recoveryArmed=false;scrollTo({top:distance,behavior:'instant'});}); }
+    if(VIEWS[initialView]) { setApp(initialView); if(initialView!==initialHash)writeRoute(initialView); requestAnimationFrame(()=>{scrollTo({top:distance,behavior:'instant'});}); }
     motion.addEventListener('change',requestRender);
   })();
   </script>
