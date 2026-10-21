@@ -100,43 +100,7 @@ button svg, a svg { flex-shrink: 0; }
 .scroll-hint { position: absolute; z-index: 9; right: var(--gutter-end); bottom: 22px; color: #e9dbe6; font-size: 12px; letter-spacing: 1.2px; }
 .screen-portal { position: absolute; z-index: 10; inset: 0; overflow: clip; opacity: 0; background: #07101f; will-change: opacity; }
 .screen-portal.fullscreen { position: fixed; inset: 0; transform: none !important; }
-/* A signal handoff, not a second computer scene. White hides the bitmap's
-   resolution limit; sparse pink/blue blocks recover over a true black field. */
-.signal-transition { position: absolute; inset: 0; z-index: 14; pointer-events: none; opacity: 1; }
-.whiteout, .recovery-field { position: absolute; inset: 0; opacity: 0; }
-.whiteout { background: #fff; }
-.recovery-field { background: #000; }
-.signal-pixels { position: absolute; left: 50%; top: 50%; width: min(680px,78vw); height: clamp(100px,18vw,180px); transform: translate(-50%,-50%); opacity: 0; --pixel-size: clamp(5px,.7vw,9px); }
-.signal-pixels i { position: absolute; left: calc(var(--x) * 1%); top: calc(var(--y) * 1%); width: calc(var(--w,1) * var(--pixel-size)); height: var(--pixel-size); background: var(--blue); }
-.signal-pixels i:nth-child(3n), .signal-pixels i:nth-child(4n) { background: var(--pink); }
-.signal-pixels i:nth-child(5n) { height: calc(var(--pixel-size) * 2); }
-/* 03 恢复信号方块坐标：x/y 为容器中的百分比，w 为方块宽度倍数。 */
-.signal-pixels i:nth-child(1) { --x:12; --y:28; --w:2; }
-.signal-pixels i:nth-child(2) { --x:15; --y:28; --w:5; }
-.signal-pixels i:nth-child(3) { --x:35; --y:28; --w:1; }
-.signal-pixels i:nth-child(4) { --x:64; --y:28; --w:3; }
-.signal-pixels i:nth-child(5) { --x:29; --y:39; --w:2; }
-.signal-pixels i:nth-child(6) { --x:32; --y:39; --w:8; }
-.signal-pixels i:nth-child(7) { --x:54; --y:39; --w:3; }
-.signal-pixels i:nth-child(8) { --x:82; --y:39; --w:1; }
-.signal-pixels i:nth-child(9) { --x:6; --y:50; --w:4; }
-.signal-pixels i:nth-child(10) { --x:39; --y:50; --w:2; }
-.signal-pixels i:nth-child(11) { --x:48; --y:50; --w:7; }
-.signal-pixels i:nth-child(12) { --x:63; --y:50; --w:2; }
-.signal-pixels i:nth-child(13) { --x:19; --y:61; --w:1; }
-.signal-pixels i:nth-child(14) { --x:21; --y:61; --w:3; }
-.signal-pixels i:nth-child(15) { --x:59; --y:61; --w:5; }
-.signal-pixels i:nth-child(16) { --x:70; --y:61; --w:4; }
-.signal-pixels i:nth-child(17) { --x:37; --y:72; --w:4; }
-.signal-pixels i:nth-child(18) { --x:51; --y:72; --w:1; }
-.signal-active .signal-pixels { animation: signal-recover 760ms steps(1,end) both; }
-@keyframes signal-recover {
-  0%, 10% { opacity: 0; transform: translate(-50%,-50%); }
-  14%, 30% { opacity: .95; transform: translate(calc(-50% + 3px),-50%); }
-  31%, 46% { opacity: .16; transform: translate(-50%,calc(-50% + 2px)); }
-  47%, 68% { opacity: .35; transform: translate(-50%,-50%); }
-  69%, 100% { opacity: .2; transform: translate(-50%,-50%); }
-}
+/* 03 镜头到 OS 的透明度由滚动位置连续控制；不添加开机动画或闪烁遮罩。 */
 .os-desktop { position: absolute; inset: 0; isolation: isolate; overflow: hidden; }
 .os-wallpaper { position: absolute; left: 0; top: 0; width: 1536px; height: 3072px; transform-origin: 0 0; z-index: -2; opacity: .64; }
 .os-desktop:before { content: ''; position: absolute; z-index: -1; inset: 0; background: linear-gradient(90deg,rgba(4,12,26,.45),rgba(4,12,26,.12)); }
@@ -311,7 +275,6 @@ button svg, a svg { flex-shrink: 0; }
 @media (prefers-reduced-motion: reduce) {
   *, *:before, *:after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
   .art-plane { will-change: auto; }
-  .signal-transition { display: none; }
 }
 
 @media print {
